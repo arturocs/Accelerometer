@@ -1,6 +1,5 @@
-main.o: ../main.c ../init_mcu.h ../board_features.h \
- ../ble-configuration.h ../init_board.h ../init_app.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_emu.h \
+platform/emlib/src/em_letimer.o: ../platform/emlib/src/em_letimer.c \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_letimer.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/em_device.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p332f1024gl125.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\CMSIS\Include/core_cm4.h \
@@ -55,49 +54,14 @@ main.o: ../main.c ../init_mcu.h ../board_features.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_dmareq.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_ports.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_pins.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_cmu.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_common.h \
- ../hal-config.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\EFR32MG12_BRD4162A\config/hal-config-board.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\halconfig\inc\hal-config/hal-config-types.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h \
- ../hal-config-app-common.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\halconfig/bsphalconfig.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\bsp/bsp_bcp.h \
- ../app.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/gecko_configuration.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/bg_types.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/retargetswo.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_chip.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_system.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\bsp/bsp.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_usart.h \
- ../spidrv.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emdrv\common\inc/ecode.h \
- ../spidrv_config.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\inc/sl_sleeptimer.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\config/sl_sleeptimer_config.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\common\inc/sl_status.h \
- ../dmadrv.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h \
- ../dmadrv_config.h
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h
 
-../init_mcu.h:
-
-../board_features.h:
-
-../ble-configuration.h:
-
-../init_board.h:
-
-../init_app.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_emu.h:
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_letimer.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/em_device.h:
 
@@ -207,64 +171,14 @@ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Dev
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_pins.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h:
-
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_cmu.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_common.h:
 
-../hal-config.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\EFR32MG12_BRD4162A\config/hal-config-board.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\halconfig\inc\hal-config/hal-config-types.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h:
-
-../hal-config-app-common.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\halconfig/bsphalconfig.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\bsp/bsp_bcp.h:
-
-../app.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/gecko_configuration.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/bg_gattdb_def.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\protocol\bluetooth\ble_stack\inc\common/bg_types.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/retargetswo.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_chip.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_system.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\bsp/bsp.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_usart.h:
-
-../spidrv.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emdrv\common\inc/ecode.h:
-
-../spidrv_config.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\inc/sl_sleeptimer.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\config/sl_sleeptimer_config.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\common\inc/sl_status.h:
-
-../dmadrv.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h:
-
-../dmadrv_config.h:
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h:

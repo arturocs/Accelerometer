@@ -1,179 +1,643 @@
-/* 10/16/2018 Copyright Tlera Corporation
- *
- *  Created by Kris Winer
- *
- *  The BMA400 is an inexpensive (~$2), three-axis, medium-resolution (12-bit), ultra-low power (800 nA low power mode) accelerometer
- *  in a tiny 2 mm x 2 mm LGA12 package with 1024-byte FIFO,
- *  two multifunction interrupts and widely configurable sample rate (15 - 800 Hz), full range (2 - 16 g), low power modes,
- *  and interrupt detection behaviors. This accelerometer is nice choice for motion-based wake/sleep,
- *  tap detection, step counting, and simple orientation estimation.
- *
- *  Library may be used freely and without limit with attribution.
- *
+/**
+* Copyright (c) 2020 Bosch Sensortec GmbH. All rights reserved.
+*
+* BSD-3-Clause
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met:
+*
+* 1. Redistributions of source code must retain the above copyright
+*    notice, this list of conditions and the following disclaimer.
+*
+* 2. Redistributions in binary form must reproduce the above copyright
+*    notice, this list of conditions and the following disclaimer in the
+*    documentation and/or other materials provided with the distribution.
+*
+* 3. Neither the name of the copyright holder nor the names of its
+*    contributors may be used to endorse or promote products derived from
+*    this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+* COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+* IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*
+* @file bma400.h
+* @date 10/01/2020
+* @version  1.5.6
+*
+*/
+
+/*!
+ * @defgroup bma400 BMA400
+ * @brief <a href="https://www.bosch-sensortec.com/bst/products/all_products/bma400_1">Product Overview</a>
+ * and  <a href="https://github.com/BoschSensortec/BMA400-API">Sensor API Source Code</a>
  */
 
-#ifndef BMA400_h
-#define BMA400_h
+#ifndef BMA400_H__
+#define BMA400_H__
 
-//#include "Arduino.h"
-//#include <Wire.h>
-
-#include "stdint.h"
-#include <stdio.h>
-#include "retargetswo.h"
-#include "i2cspm.h"
-#include "udelay.h"
-
-/* Register Map BMA400
- // https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMA400-DS000-02.pdf
- */
-#define BMA400_CHIPID 0x00
-
-#define BMA400_ERR_REG 0x02
-#define BMA400_STATUS 0x03
-#define BMA400_ACCD_X_LSB 0x04
-#define BMA400_ACCD_X_MSB 0x05
-#define BMA400_ACCD_Y_LSB 0x06
-#define BMA400_ACCD_Y_MSB 0x07
-#define BMA400_ACCD_Z_LSB 0x08
-#define BMA400_ACCD_Z_MSB 0x09
-#define BMA400_SENSOR_TIME_0 0x0A
-#define BMA400_SENSOR_TIME_1 0x0B
-#define BMA400_SENSOR_TIME_2 0x0C
-#define BMA400_EVENT 0x0D
-#define BMA400_INT_STAT_0 0x0E
-#define BMA400_INT_STAT_1 0x0F
-#define BMA400_INT_STAT_2 0x10
-#define BMA400_TEMP_DATA 0x11
-#define BMA400_FIFO_LENGTH0 0x12
-#define BMA400_FIFO_LENGTH1 0x13
-#define BMA400_FIFO_DATA 0x14
-#define BMA400_STEP_CNT_0 0x15
-#define BMA400_STEP_CNT_1 0x16
-#define BMA400_STEP_CNT_2 0x17
-#define BMA400_STEP_STAT 0x18
-#define BMA400_ACC_CONFIG0 0x19
-#define BMA400_ACC_CONFIG1 0x1A
-#define BMA400_ACC_CONFIG2 0x1B
-
-#define BMA400_INT_CONFIG0 0x1F
-#define BMA400_INT_CONFIG1 0x20
-#define BMA400_INT1_MAP 0x21
-#define BMA400_INT2_MAP 0x22
-#define BMA400_INT12_MAP 0x23
-#define BMA400_INT12_IO_CTRL 0x24
-
-#define BMA400_FIFO_CONFIG0 0x26
-#define BMA400_FIFO_CONFIG1 0x27
-#define BMA400_FIFO_CONFIG2 0x28
-#define BMA400_FIFO_PWR_CONFIG 0x29
-#define BMA400_AUTOLOWPOW_0 0x2A
-#define BMA400_AUTOLOWPOW_1 0x2B
-#define BMA400_AUTOWAKEUP_0 0x2C
-#define BMA400_AUTOWAKEUP_1 0x2D
-
-#define BMA400_WKUP_INT_CONFIG0 0x2F
-#define BMA400_WKUP_INT_CONFIG1 0x30
-#define BMA400_WKUP_INT_CONFIG2 0x31
-#define BMA400_WKUP_INT_CONFIG3 0x32
-#define BMA400_WKUP_INT_CONFIG4 0x33
-
-#define BMA400_ORIENTCH_CONFIG0 0x35
-#define BMA400_ORIENTCH_CONFIG1 0x36
-#define BMA400_ORIENTCH_CONFIG2 0x37
-#define BMA400_ORIENTCH_CONFIG3 0x38
-#define BMA400_ORIENTCH_CONFIG4 0x39
-#define BMA400_ORIENTCH_CONFIG5 0x3A
-#define BMA400_ORIENTCH_CONFIG6 0x3B
-#define BMA400_ORIENTCH_CONFIG7 0x3C
-#define BMA400_ORIENTCH_CONFIG8 0x3D
-#define BMA400_ORIENTCH_CONFIG9 0x3E
-
-#define BMA400_GEN1INT_CONFIG0 0x3F
-#define BMA400_GEN1INT_CONFIG1 0x40
-#define BMA400_GEN1INT_CONFIG2 0x41
-#define BMA400_GEN1INT_CONFIG3 0x42
-#define BMA400_GEN1INT_CONFIG31 0x43
-#define BMA400_GEN1INT_CONFIG4 0x44
-#define BMA400_GEN1INT_CONFIG5 0x45
-#define BMA400_GEN1INT_CONFIG6 0x46
-#define BMA400_GEN1INT_CONFIG7 0x47
-#define BMA400_GEN1INT_CONFIG8 0x48
-#define BMA400_GEN1INT_CONFIG9 0x49
-#define BMA400_GEN2INT_CONFIG0 0x4A
-#define BMA400_GEN2INT_CONFIG1 0x4B
-#define BMA400_GEN2INT_CONFIG2 0x4C
-#define BMA400_GEN2INT_CONFIG3 0x4D
-#define BMA400_GEN2INT_CONFIG31 0x4E
-#define BMA400_GEN2INT_CONFIG4 0x4F
-#define BMA400_GEN2INT_CONFIG5 0x50
-#define BMA400_GEN2INT_CONFIG6 0x51
-#define BMA400_GEN2INT_CONFIG7 0x52
-#define BMA400_GEN2INT_CONFIG8 0x53
-#define BMA400_GEN2INT_CONFIG9 0x54
-#define BMA400_ACTCH_CONFIG0 0x55
-#define BMA400_ACTCH_CONFIG1 0x56
-#define BMA400_TAP_CONFIG 0x57
-#define BMA400_TAP_CONFIG1 0x58
-
-#define BMA400_IF_CONF 0x7C
-#define BMA400_SELF_TEST 0x7D
-#define BMA400_CMD 0x7E
-
-#define BMA400_ADDRESS 0x14 // if ADO is 0 (default)
-
-#define AFS_2G 0x00
-#define AFS_4G 0x01
-#define AFS_8G 0x02
-#define AFS_16G 0x03
-
-#define SR_12_5Hz 0x05 // 12.5 Hz sample rate, etc
-#define SR_25Hz 0x06
-#define SR_50Hz 0x07
-#define SR_100Hz 0x08
-#define SR_200Hz 0x09 // 200 Hz sample rate
-#define SR_400Hz 0x0A
-#define SR_800Hz 0x0B // 800 Hz sample rate
-
-#define sleep_Mode 0x00 // define power modes
-#define lowpower_Mode 0x01
-#define normal_Mode 0x02
-
-// define oversampling
-#define osr0 0x00 // lowest power, lowest oversampling, lowest accuracy
-#define osr1 0x01
-#define osr2 0x02
-#define osr3 0x03 // highest oversampling, highest power, highest accuracy
-
-#define acc_filt1 0x00   // variable ODR filter
-#define acc_filt2 0x01   // fixed 100 Hz ODR filter
-#define acc_filt_lp 0x02 // fixed 100 Hz ODR filter, 1 Hz BW
-
-typedef struct BMA400 {
-	uint8_t _intPin1;
-	uint8_t _intPin2;
-	float _aRes;
-} s_BMA400;
-
-void delay(uint32_t ms);
-s_BMA400 BMA400(uint8_t intPin1, uint8_t intPin2);
-float getAres(s_BMA400 *conf, uint8_t Ascale);
-uint8_t getChipID();
-void initBMA400(uint8_t Ascale, uint8_t SR, uint8_t power_Mode, uint8_t OSR,
-		uint8_t acc_filter);
-void CompensationBMA400(s_BMA400 *conf, uint8_t Ascale, uint8_t SR,
-		uint8_t power_Mode, uint8_t OSR, uint8_t acc_filter, float *offset);
-void resetBMA400();
-void selfTestBMA400();
-void readBMA400AccelData(int16_t *destination);
-int16_t readBMA400TempData();
-void activateNoMotionInterrupt();
-void deactivateNoMotionInterrupt();
-uint8_t getStatus();
-void I2Cscan();
-void writeByte(uint8_t address, uint8_t subAddress, uint8_t data);
-uint8_t readByte(uint8_t address, uint8_t subAddress);
-void readBytes(uint8_t address, uint8_t subAddress, uint8_t count,
-		uint8_t *dest);
-I2C_TransferReturn_TypeDef i2cTransferByte(I2C_TypeDef *i2c, uint16_t addr, uint8_t command, uint8_t *val, uint8_t flag);
+/* CPP guard */
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+#include "bma400_defs.h"
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiInit Initialization
+ * @brief Initialize the sensor and device structure
+ */
+
+/*!
+ * \ingroup bma400ApiInit
+ * \page bma400_api_bma400_init bma400_init
+ * \code
+ * int8_t bma400_init(struct bma400_dev *dev);
+ * \endcode
+ * @details This API reads the chip-id of the sensor which is the first step to
+ * verify the sensor and also it configures the read mechanism of SPI and
+ * I2C interface. As this API is the entry point, call this API before using other APIs.
+ *
+ * @param[in,out] dev : Structure instance of bma400_dev
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_init(struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiData Data read out
+ * @brief Read our data from the sensor
+ */
+
+/*!
+ * \ingroup bma400ApiData
+ * \page bma400_api_bma400_get_accel_data bma400_get_accel_data
+ * \code
+ * int8_t bma400_get_accel_data(uint8_t data_sel, struct bma400_sensor_data *accel,
+ *                              const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the accelerometer data along with the sensor-time.
+ *
+ * @param[in] data_sel     : Variable to select sensor data only
+ *                           or data along with sensortime
+ * @param[in,out] accel    : Structure instance to store data
+ * @param[in] dev          : Structure instance of bma400_dev
+ *
+ * Assignable macros for "data_sel" :
+ * @code
+ *   - BMA400_DATA_ONLY
+ *   - BMA400_DATA_SENSOR_TIME
+ * @endcode
+ *
+ * @note The accelerometer data value is in LSB, based on the range selected.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_accel_data(uint8_t data_sel, struct bma400_sensor_data *accel, const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiConfig Configuration
+ * @brief Configuration API of sensor
+ */
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_set_power_mode bma400_set_power_mode
+ * \code
+ * int8_t bma400_set_power_mode(uint8_t power_mode, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to set the power mode of the sensor.
+ *
+ * @param[in] power_mode  : Macro to select power mode of the sensor.
+ * @param[in] dev         : Structure instance of bma400_dev.
+ *
+ * Possible value for power_mode :
+ * @code
+ *   BMA400_NORMAL_MODE
+ *   BMA400_SLEEP_MODE
+ *   BMA400_LOW_POWER_MODE
+ * @endcode
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_set_power_mode(uint8_t power_mode, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_get_power_mode bma400_get_power_mode
+ * \code
+ * int8_t bma400_get_power_mode(uint8_t *power_mode, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the power mode of the sensor.
+ * @param[out] power_mode  : power mode of the sensor.
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * * Possible value for power_mode :
+ * @code
+ *   BMA400_NORMAL_MODE
+ *   BMA400_SLEEP_MODE
+ *   BMA400_LOW_POWER_MODE
+ * @endcode
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_power_mode(uint8_t *power_mode, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_set_sensor_conf bma400_set_sensor_conf
+ * \code
+ * int8_t bma400_set_sensor_conf(const struct bma400_sensor_conf *conf, uint16_t n_sett,
+ *                               const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to define sensor settings such as:
+ *    - Accelerometer configuration (Like ODR,OSR,range...)
+ *    - Tap configuration
+ *    - Activity change configuration
+ *    - Gen1/Gen2 configuration
+ *    - Orientation change configuration
+ *    - Step counter configuration
+ *
+ * @param[in] conf         : Structure instance of the configuration structure
+ * @param[in] n_sett       : Number of settings to be set
+ * @param[in] dev          : Structure instance of bma400_dev
+ *
+ * @note Before calling this API, fill in the value of the required configurations in the conf structure
+ * (Examples are mentioned in the readme.md).
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_set_sensor_conf(const struct bma400_sensor_conf *conf, uint16_t n_sett, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_get_sensor_conf bma400_get_sensor_conf
+ * \code
+ * int8_t bma400_get_sensor_conf(struct bma400_sensor_conf *conf, uint16_t n_sett, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the sensor settings like sensor
+ * configurations and interrupt configurations and store
+ * them in the corresponding structure instance.
+ *
+ * @param[in] conf         : Structure instance of the configuration structure
+ * @param[in] n_sett       : Number of settings to be obtained
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Once the API is called, the settings structure will be updated in the settings structure.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_sensor_conf(struct bma400_sensor_conf *conf, uint16_t n_sett, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_set_device_conf bma400_set_device_conf
+ * \code
+ * int8_t bma400_set_device_conf(const struct bma400_device_conf *conf, uint8_t n_sett,
+ *                               const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to set the device specific settings like:
+ *  - BMA400_AUTOWAKEUP_TIMEOUT
+ *  - BMA400_AUTOWAKEUP_INT
+ *  - BMA400_AUTO_LOW_POWER
+ *  - BMA400_INT_PIN_CONF
+ *  - BMA400_INT_OVERRUN_CONF
+ *  - BMA400_FIFO_CONF
+ *
+ * @param[in] conf         : Structure instance of the configuration structure.
+ * @param[in] n_sett       : Number of settings to be set
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Before calling this API, fill in the value of the required configurations in the
+ * conf structure(refer Examples).
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_set_device_conf(const struct bma400_device_conf *conf, uint8_t n_sett, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiConfig
+ * \page bma400_api_bma400_get_device_conf bma400_get_device_conf
+ * \code
+ * int8_t bma400_get_device_conf(struct bma400_device_conf *conf, uint8_t n_sett, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the device specific settings and store
+ * them in the corresponding structure instance.
+ *
+ * @param[in] conf         : Structure instance of the configuration structure
+ * @param[in] n_sett       : Number of settings to be obtained
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Once the API is called, the settings structure will be updated
+ * in the settings structure.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_device_conf(struct bma400_device_conf *conf, uint8_t n_sett, const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiFifo FIFO
+ * @brief Access and extract FIFO accelerometer data
+ */
+
+/*!
+ * \ingroup bma400ApiFifo
+ * \page bma400_api_bma400_set_fifo_flush bma400_set_fifo_flush
+ * \code
+ * int8_t bma400_set_fifo_flush(const struct bma400_dev *dev);
+ * \endcode
+ *  @details This API writes the fifo_flush command into command register.
+ *  This action clears all data in the FIFO.
+ *
+ *  @param[in] dev           : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_set_fifo_flush(const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiFifo
+ * \page bma400_api_bma400_get_fifo_data bma400_get_fifo_data
+ * \code
+ * int8_t bma400_get_fifo_data(struct bma400_fifo_data *fifo, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API reads the FIFO data from the sensor.
+ *
+ * @note User has to allocate the FIFO buffer along with
+ * corresponding FIFO read length from his side before calling this API
+ * as mentioned in the readme.md
+ *
+ * @note User must specify the number of bytes to read from the FIFO in
+ * fifo->length , It will be updated by the number of bytes actually
+ * read from FIFO after calling this API
+ *
+ * @param[in,out] fifo      : Pointer to the FIFO structure.
+ *
+ * @param[in,out] dev       : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_fifo_data(struct bma400_fifo_data *fifo, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiFifo
+ * \page bma400_api_bma400_extract_accel bma400_extract_accel
+ * \code
+ * int8_t bma400_extract_accel(struct bma400_fifo_data *fifo, struct bma400_sensor_data *accel_data,
+ *                             uint16_t *frame_count, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API parses and extracts the accelerometer frames, FIFO time
+ * and control frames from FIFO data read by the "bma400_get_fifo_data" API
+ * and stores it in the "accel_data" structure instance.
+ *
+ * @note The bma400_extract_accel API should be called only after
+ * reading the FIFO data by calling the bma400_get_fifo_data() API
+ * Please refer the readme.md for usage.
+ *
+ * @param[in,out] fifo        : Pointer to the FIFO structure.
+ *
+ * @param[out] accel_data     : Structure instance of bma400_sensor_data where
+ *                              the accelerometer data from FIFO is extracted
+ *                              and stored after calling this API
+ *
+ * @param[in,out] frame_count : Number of valid accelerometer frames requested
+ *                              by user is given as input and it is updated by
+ *                              the actual frames parsed from the FIFO
+ *
+ * @param[in] dev             : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_extract_accel(struct bma400_fifo_data *fifo,
+                            struct bma400_sensor_data *accel_data,
+                            uint16_t *frame_count,
+                            const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiInterrupt Interrupt
+ * @brief Interrupt API
+ */
+
+/*!
+ * \ingroup bma400ApiInterrupt
+ * \page bma400_api_bma400_get_interrupt_status bma400_get_interrupt_status
+ * \code
+ * int8_t bma400_get_interrupt_status(uint16_t *int_status, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to check if the interrupts are asserted and return the status.
+ *
+ * @param[in] int_status   : Interrupt status of sensor
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Interrupt status of the sensor determines which all interrupts are asserted at any instant of time.
+ * @code
+ *  BMA400_WAKEUP_INT_ASSERTED
+ *  BMA400_ORIENT_CH_INT_ASSERTED
+ *  BMA400_GEN1_INT_ASSERTED
+ *  BMA400_GEN2_INT_ASSERTED
+ *  BMA400_FIFO_FULL_INT_ASSERTED
+ *  BMA400_FIFO_WM_INT_ASSERTED
+ *  BMA400_DRDY_INT_ASSERTED
+ *  BMA400_INT_OVERRUN_ASSERTED
+ *  BMA400_STEP_INT_ASSERTED
+ *  BMA400_S_TAP_INT_ASSERTED
+ *  BMA400_D_TAP_INT_ASSERTED
+ *  BMA400_ACT_CH_X_ASSERTED
+ *  BMA400_ACT_CH_Y_ASSERTED
+ *  BMA400_ACT_CH_Z_ASSERTED
+ *@endcode
+ * @note Call the API and then use the above macros to check whether the interrupt is asserted or not.
+ *@code
+ * if (int_status & BMA400_FIFO_FULL_INT_ASSERTED) {
+ *     printf("\n FIFO FULL INT ASSERTED");
+ * }
+ *@endcode
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_interrupt_status(uint16_t *int_status, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiInterrupt
+ * \page bma400_api_bma400_get_interrupts_enabled bma400_get_interrupts_enabled
+ * \code
+ * int8_t bma400_get_interrupts_enabled(struct bma400_int_enable *int_select, uint8_t n_sett,
+ *                                      const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the enable/disable status of the various interrupts.
+ *
+ * @param[in] int_select   : Structure to select specific interrupts
+ * @param[in] n_sett       : Number of interrupt settings enabled / disabled
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Select the needed interrupt type for which the status of it whether
+ * it is enabled/disabled is to be known in the int_select->int_sel, and the
+ * output is stored in int_select->conf either as BMA400_ENABLE/BMA400_DISABLE
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_interrupts_enabled(struct bma400_int_enable *int_select, uint8_t n_sett,
+                                     const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiInterrupt
+ * \page bma400_api_bma400_enable_interrupt bma400_enable_interrupt
+ * \code
+ * int8_t bma400_enable_interrupt(const struct bma400_int_enable *int_select, uint8_t n_sett,
+ *                                const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to enable the various interrupts.
+ *
+ * @param[in] int_select   : Structure to enable specific interrupts
+ * @param[in] n_sett       : Number of interrupt settings enabled / disabled
+ * @param[in] dev          : Structure instance of bma400_dev.
+ *
+ * @note Multiple interrupt can be enabled/disabled by
+ * @code
+ *    struct interrupt_enable int_select[2];
+ *
+ *    int_select[0].int_sel = BMA400_FIFO_FULL_INT_EN;
+ *    int_select[0].conf = BMA400_ENABLE;
+ *
+ *    int_select[1].int_sel = BMA400_FIFO_WM_INT_EN;
+ *    int_select[1].conf = BMA400_ENABLE;
+ *
+ *    rslt = bma400_enable_interrupt(&int_select, 2, dev);
+ *@endcode
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_enable_interrupt(const struct bma400_int_enable *int_select, uint8_t n_sett,
+                               const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiRegister Registers
+ * @brief Generic API for accessing sensor registers
+ */
+
+/*!
+ * \ingroup bma400ApiRegister
+ * \page bma400_api_bma400_set_regs bma400_set_regs
+ * \code
+ * int8_t bma400_set_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API writes the given data to the register address of the sensor.
+ *
+ * @param[in] reg_addr : Register address from where the data to be written.
+ * @param[in] reg_data : Pointer to data buffer which is to be written
+ *                       in the reg_addr of sensor.
+ * @param[in] len      : No of bytes of data to write..
+ * @param[in] dev      : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_set_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiRegister
+ * \page bma400_api_bma400_get_regs bma400_get_regs
+ * \code
+ * int8_t bma400_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API reads the data from the given register address of sensor.
+ *
+ * @param[in] reg_addr  : Register address from where the data to be read
+ * @param[out] reg_data : Pointer to data buffer to store the read data.
+ * @param[in] len       : No of bytes of data to be read.
+ * @param[in] dev       : Structure instance of bma400_dev.
+ *
+ * @note Auto increment applies to most of the registers, with the
+ * exception of a few registers that trap the address. For e.g.,
+ * Register address - 0x14(BMA400_FIFO_DATA_ADDR)
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiSystem System
+ * @brief API that performs system-level operations
+ */
+
+/*!
+ * \ingroup bma400ApiSystem
+ * \page bma400_api_bma400_soft_reset bma400_soft_reset
+ * \code
+ * int8_t bma400_soft_reset(const struct bma400_dev *dev);
+ * \endcode
+ * @details This API soft-resets the sensor where all the registers are reset to their default values except 0x4B.
+ *
+ * @param[in] dev       : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_soft_reset(const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiSystem
+ * \page bma400_api_bma400_perform_self_test bma400_perform_self_test
+ * \code
+ * int8_t bma400_perform_self_test(const struct bma400_dev *dev);
+ * \endcode
+ * @details This API performs a self test of the accelerometer in BMA400.
+ *
+ * @param[in] dev    : Structure instance of bma400_dev.
+ *
+ * @note The return value of this API is the result of self test.
+ * A self test does not soft reset of the sensor. Hence, the user can
+ * define the required settings after performing the self test.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error / failure
+ */
+int8_t bma400_perform_self_test(const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiSystem
+ * \page bma400_api_bma400_get_temperature_data bma400_get_temperature_data
+ * \code
+ * int8_t bma400_get_temperature_data(int16_t *temperature_data, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the temperature data output.
+ *
+ * @note Temperature data output must be divided by a factor of 10
+ * Consider temperature_data = 195 ,
+ * Then the actual temperature is 19.5 degree Celsius.
+ *
+ * @param[in,out] temperature_data   : Temperature data
+ * @param[in] dev                    : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_temperature_data(int16_t *temperature_data, const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400ApiSc Step counter
+ * @brief Step counter feature
+ */
+
+/*!
+ * \ingroup bma400ApiSc
+ * \page bma400_api_bma400_set_step_counter_param bma400_set_step_counter_param
+ * \code
+ * int8_t bma400_set_step_counter_param(uint8_t *sccr_conf, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to set the step counter's configuration parameters from the registers 0x59 to 0x71.
+ *
+ * @param[in] sccr_conf : sc config parameter
+ * @param[in] dev    : Structure instance of bma400_dev.
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error / failure
+ */
+int8_t bma400_set_step_counter_param(uint8_t *sccr_conf, const struct bma400_dev *dev);
+
+/*!
+ * \ingroup bma400ApiSc
+ * \page bma400_api_bma400_get_steps_counted bma400_get_steps_counted
+ * \code
+ * int8_t bma400_get_steps_counted(uint32_t *step_count, uint8_t *activity_data, const struct bma400_dev *dev);
+ * \endcode
+ * @details This API is used to get the step counter output in form of number of steps in the step_count value.
+ *
+ * @param[out] step_count      : Number of step counts
+ * @param[out] activity_data   : Activity data WALK/STILL/RUN
+ * @param[in] dev              : Structure instance of bma400_dev.
+ *
+ *  activity_data   |  Status
+ * -----------------|------------------
+ *  0x00            | BMA400_STILL_ACT
+ *  0x01            | BMA400_WALK_ACT
+ *  0x02            | BMA400_RUN_ACT
+ *
+ * @return Result of API execution status.
+ * @retval Zero Success
+ * @retval Postive Warning
+ * @retval Negative Error
+ */
+int8_t bma400_get_steps_counted(uint32_t *step_count, uint8_t *activity_data, const struct bma400_dev *dev);
+
+/**
+ * \ingroup bma400
+ * \defgroup bma400Examples Examples
+ * @brief Reference Examples */
+
+#ifdef __cplusplus
+}
+#endif /* End of CPP guard */
+
+#endif /* BMA400_H__ */
+/** @} */

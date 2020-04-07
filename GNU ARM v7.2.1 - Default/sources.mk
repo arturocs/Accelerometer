@@ -22,7 +22,9 @@ hardware/kit/common/bsp \
 hardware/kit/common/drivers \
 platform/Device/SiliconLabs/EFR32MG12P/Source/GCC \
 platform/Device/SiliconLabs/EFR32MG12P/Source \
+platform/emdrv/dmadrv/src \
 platform/emdrv/sleep/src \
+platform/emdrv/spidrv/src \
 platform/emlib/src \
 platform/service/sleeptimer/src \
 protocol/bluetooth/lib/EFR32MG12P/GCC \
