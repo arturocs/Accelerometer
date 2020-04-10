@@ -53,21 +53,8 @@
 #include "em_emu.h"
 #include "bsp.h"
 #include "spidrv.h"
+#include <bma400.h>
 
-SPIDRV_HandleData_t handleData;
-SPIDRV_Handle_t handle = &handleData;
-
-void write(int count, void *buffer){
-	Ecode_t errno = SPIDRV_MTransmitB(handle, buffer, count);
-}
-void read(int count, void *buffer){
-	Ecode_t errno = SPIDRV_MReceiveB(handle, buffer, count);
-}
-void
-void SPI_Init(){
-	SPIDRV_Init_t initData = SPIDRV_MASTER_USART2;
-	SPIDRV_Init(handle, &initData);
-}
 
 
 int main(void) {
@@ -81,14 +68,30 @@ int main(void) {
 	RETARGET_SwoInit();
 
 	/* Chip errata */
-	CHIP_Init();
+	//CHIP_Init();
 
 	printf("Starting\n");
+	printf("Starting\n");
+	printf("Starting\n");
+	printf("Starting\n");
+	struct bma400_dev bma = { .chip_id = 0, .dev_id = 0, .intf = BMA400_SPI_INTF,
+			.intf_ptr = NULL, .dummy_byte = 0, .read = &spi_read, .write =
+					&spi_write, .delay_ms = &delay, .resolution = 0,
+			.read_write_len = 0, };
+	int8_t rslt;
 
-	while (1) {
-	 printf("Hello from soc-empty world!\n");
+	//set_interface(BMA400_SPI_INTF, &bma);
+
+	rslt = bma400_init(&bma);
+	print_rslt(rslt);
+
+	if (rslt == BMA400_OK) {
+		printf("BMA400 found with chip ID 0x%X\r\n", bma.chip_id);
 	}
 
-}
+	//while (1) {
+	//	printf("Hello from soc-empty world!\n");
+	//}
 
+}
 

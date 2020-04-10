@@ -85,7 +85,9 @@ main.o: ../main.c ../init_mcu.h ../board_features.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\common\inc/sl_status.h \
  ../dmadrv.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h \
- ../dmadrv_config.h
+ ../dmadrv_config.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/bma400.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/bma400_defs.h
 
 ../init_mcu.h:
 
@@ -268,3 +270,7 @@ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\com
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h:
 
 ../dmadrv_config.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/bma400.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/bma400_defs.h:

@@ -1,40 +1,40 @@
 /**
-* Copyright (c) 2020 Bosch Sensortec GmbH. All rights reserved.
-*
-* BSD-3-Clause
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1. Redistributions of source code must retain the above copyright
-*    notice, this list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright
-*    notice, this list of conditions and the following disclaimer in the
-*    documentation and/or other materials provided with the distribution.
-*
-* 3. Neither the name of the copyright holder nor the names of its
-*    contributors may be used to endorse or promote products derived from
-*    this software without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-* COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
-* IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-* @file bma400.h
-* @date 10/01/2020
-* @version  1.5.6
-*
-*/
+ * Copyright (c) 2020 Bosch Sensortec GmbH. All rights reserved.
+ *
+ * BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ *    contributors may be used to endorse or promote products derived from
+ *    this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @file bma400.h
+ * @date 10/01/2020
+ * @version  1.5.6
+ *
+ */
 
 /*!
  * @defgroup bma400 BMA400
@@ -51,6 +51,13 @@ extern "C" {
 #endif
 
 #include "bma400_defs.h"
+
+uint8_t spi_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data,
+		uint16_t length);
+uint8_t spi_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data,
+		uint16_t length);
+void delay(uint32_t ms);
+void print_rslt(int8_t rslt);
 
 /**
  * \ingroup bma400
@@ -110,7 +117,8 @@ int8_t bma400_init(struct bma400_dev *dev);
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_accel_data(uint8_t data_sel, struct bma400_sensor_data *accel, const struct bma400_dev *dev);
+int8_t bma400_get_accel_data(uint8_t data_sel, struct bma400_sensor_data *accel,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -194,7 +202,8 @@ int8_t bma400_get_power_mode(uint8_t *power_mode, const struct bma400_dev *dev);
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_set_sensor_conf(const struct bma400_sensor_conf *conf, uint16_t n_sett, const struct bma400_dev *dev);
+int8_t bma400_set_sensor_conf(const struct bma400_sensor_conf *conf,
+		uint16_t n_sett, const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiConfig
@@ -217,7 +226,8 @@ int8_t bma400_set_sensor_conf(const struct bma400_sensor_conf *conf, uint16_t n_
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_sensor_conf(struct bma400_sensor_conf *conf, uint16_t n_sett, const struct bma400_dev *dev);
+int8_t bma400_get_sensor_conf(struct bma400_sensor_conf *conf, uint16_t n_sett,
+		const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiConfig
@@ -246,7 +256,8 @@ int8_t bma400_get_sensor_conf(struct bma400_sensor_conf *conf, uint16_t n_sett, 
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_set_device_conf(const struct bma400_device_conf *conf, uint8_t n_sett, const struct bma400_dev *dev);
+int8_t bma400_set_device_conf(const struct bma400_device_conf *conf,
+		uint8_t n_sett, const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiConfig
@@ -269,7 +280,8 @@ int8_t bma400_set_device_conf(const struct bma400_device_conf *conf, uint8_t n_s
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_device_conf(struct bma400_device_conf *conf, uint8_t n_sett, const struct bma400_dev *dev);
+int8_t bma400_get_device_conf(struct bma400_device_conf *conf, uint8_t n_sett,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -320,7 +332,8 @@ int8_t bma400_set_fifo_flush(const struct bma400_dev *dev);
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_fifo_data(struct bma400_fifo_data *fifo, const struct bma400_dev *dev);
+int8_t bma400_get_fifo_data(struct bma400_fifo_data *fifo,
+		const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiFifo
@@ -355,9 +368,8 @@ int8_t bma400_get_fifo_data(struct bma400_fifo_data *fifo, const struct bma400_d
  * @retval Negative Error
  */
 int8_t bma400_extract_accel(struct bma400_fifo_data *fifo,
-                            struct bma400_sensor_data *accel_data,
-                            uint16_t *frame_count,
-                            const struct bma400_dev *dev);
+		struct bma400_sensor_data *accel_data, uint16_t *frame_count,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -404,7 +416,8 @@ int8_t bma400_extract_accel(struct bma400_fifo_data *fifo,
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_interrupt_status(uint16_t *int_status, const struct bma400_dev *dev);
+int8_t bma400_get_interrupt_status(uint16_t *int_status,
+		const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiInterrupt
@@ -428,8 +441,8 @@ int8_t bma400_get_interrupt_status(uint16_t *int_status, const struct bma400_dev
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_interrupts_enabled(struct bma400_int_enable *int_select, uint8_t n_sett,
-                                     const struct bma400_dev *dev);
+int8_t bma400_get_interrupts_enabled(struct bma400_int_enable *int_select,
+		uint8_t n_sett, const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiInterrupt
@@ -461,8 +474,8 @@ int8_t bma400_get_interrupts_enabled(struct bma400_int_enable *int_select, uint8
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_enable_interrupt(const struct bma400_int_enable *int_select, uint8_t n_sett,
-                               const struct bma400_dev *dev);
+int8_t bma400_enable_interrupt(const struct bma400_int_enable *int_select,
+		uint8_t n_sett, const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -489,7 +502,8 @@ int8_t bma400_enable_interrupt(const struct bma400_int_enable *int_select, uint8
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_set_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+int8_t bma400_set_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len,
+		const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiRegister
@@ -513,7 +527,8 @@ int8_t bma400_set_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const s
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const struct bma400_dev *dev);
+int8_t bma400_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -537,7 +552,6 @@ int8_t bma400_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint8_t len, const s
  * @retval Negative Error
  */
 int8_t bma400_soft_reset(const struct bma400_dev *dev);
-
 /*!
  * \ingroup bma400ApiSystem
  * \page bma400_api_bma400_perform_self_test bma400_perform_self_test
@@ -558,7 +572,6 @@ int8_t bma400_soft_reset(const struct bma400_dev *dev);
  * @retval Negative Error / failure
  */
 int8_t bma400_perform_self_test(const struct bma400_dev *dev);
-
 /*!
  * \ingroup bma400ApiSystem
  * \page bma400_api_bma400_get_temperature_data bma400_get_temperature_data
@@ -579,7 +592,8 @@ int8_t bma400_perform_self_test(const struct bma400_dev *dev);
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_temperature_data(int16_t *temperature_data, const struct bma400_dev *dev);
+int8_t bma400_get_temperature_data(int16_t *temperature_data,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400
@@ -603,7 +617,8 @@ int8_t bma400_get_temperature_data(int16_t *temperature_data, const struct bma40
  * @retval Postive Warning
  * @retval Negative Error / failure
  */
-int8_t bma400_set_step_counter_param(uint8_t *sccr_conf, const struct bma400_dev *dev);
+int8_t bma400_set_step_counter_param(uint8_t *sccr_conf,
+		const struct bma400_dev *dev);
 
 /*!
  * \ingroup bma400ApiSc
@@ -628,7 +643,8 @@ int8_t bma400_set_step_counter_param(uint8_t *sccr_conf, const struct bma400_dev
  * @retval Postive Warning
  * @retval Negative Error
  */
-int8_t bma400_get_steps_counted(uint32_t *step_count, uint8_t *activity_data, const struct bma400_dev *dev);
+int8_t bma400_get_steps_counted(uint32_t *step_count, uint8_t *activity_data,
+		const struct bma400_dev *dev);
 
 /**
  * \ingroup bma400

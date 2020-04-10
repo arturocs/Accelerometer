@@ -1,11 +1,4 @@
-BMA400.o: ../BMA400.c ../BMA400.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/retargetswo.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/i2cspm.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\halconfig/i2cspmhalconfig.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/board_features.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/ble-configuration.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\EFR32MG12_BRD4162A\config/hal-config-board.h \
+bma400.o: ../bma400.c ../bma400.h ../bma400_defs.h ../spidrv.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/em_device.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p332f1024gl125.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\CMSIS\Include/core_cm4.h \
@@ -60,29 +53,26 @@ BMA400.o: ../BMA400.c ../BMA400.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_dmareq.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_ports.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_pins.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\halconfig\inc\hal-config/hal-config-types.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_cmu.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config-app-common.h \
- C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_i2c.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_common.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emdrv\common\inc/ecode.h \
+ ../spidrv_config.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\inc/sl_sleeptimer.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\config/sl_sleeptimer_config.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\common\inc/sl_status.h \
+ ../dmadrv.h \
+ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h \
+ ../dmadrv_config.h \
  C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/udelay.h
 
-../BMA400.h:
+../bma400.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/retargetswo.h:
+../bma400_defs.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/i2cspm.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\halconfig/i2cspmhalconfig.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/board_features.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/ble-configuration.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\EFR32MG12_BRD4162A\config/hal-config-board.h:
+../spidrv.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/em_device.h:
 
@@ -192,16 +182,30 @@ C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Dev
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\Device\SiliconLabs\EFR32MG12P\Include/efr32mg12p_af_pins.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\halconfig\inc\hal-config/hal-config-types.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h:
-
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h:
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_cmu.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_assert.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4/hal-config-app-common.h:
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_bus.h:
 
-C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_i2c.h:
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_gpio.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_common.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emdrv\common\inc/ecode.h:
+
+../spidrv_config.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\inc/sl_sleeptimer.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\service\sleeptimer\config/sl_sleeptimer_config.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\common\inc/sl_status.h:
+
+../dmadrv.h:
+
+C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\platform\emlib\inc/em_ldma.h:
+
+../dmadrv_config.h:
 
 C:\Users\Arturo\SimplicityStudio\v4_workspace\Copy\ of\ soc-empty_4\hardware\kit\common\drivers/udelay.h:
